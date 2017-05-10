@@ -1,1 +1,14 @@
-.ipynb_chekpoints
+# ipython checkpoints #
+#######################
+highgarden/.ipynb_checkpoints/*
+
+# databases #
+#############
+*.csv
+*.xls
+*.xlsx
+
+
+# other #
+#########
+highgarden/DSG.ipynb
