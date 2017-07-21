@@ -11,4 +11,5 @@ highgarden/.ipynb_checkpoints/*
 
 # other #
 #########
-highgarden/DSG.ipynb
+highgarden/other/*
+*.pyc
