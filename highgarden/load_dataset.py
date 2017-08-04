@@ -38,8 +38,7 @@ def load_credit_fraud_detection(n_obs):
     return np.array(df[variable_names].apply(pd.to_numeric)), np.array(df.iloc[:, -1])
 
 def load_breast_cancer_diagnostic(n_obs):
-    skip = sorted(random.sample(range(1, n_obs), int(n_obs/2)))
-    df = pd.read_csv(DATASET_FILE + 'breastcancer.csv', header=None, nrows=n_obs, skiprows=skip)
+    df = pd.read_csv(DATASET_FILE + 'breastcancer.csv', header=None, nrows=n_obs)
     return np.array(df.iloc[:, 2:].apply(pd.to_numeric)), np.array(df.iloc[:, 1].apply(lambda x:int(x=='M')))
 
 def load_tennis_matches_winner_detection(n_obs):
@@ -54,14 +53,22 @@ def load_tennis_matches_winner_detection(n_obs):
     print(variable_names)
     return np.array(df.apply(pd.to_numeric)), np.array(y.apply(pd.to_numeric))
 
+def load_news_popularity_prediction(n_obs):
+    df = pd.read_csv(DATASET_FILE + 'newspopularity.csv', header=0, nrows=n_obs)
+    y = np.array(df.iloc[:, -1].apply(pd.to_numeric))
+    y = np.array([int(x>=1400) for x in y])
+    print(df.iloc[:,2:-1].columns)
+    return np.array(df.iloc[:, 2:-1].apply(pd.to_numeric)), y
+
 def main(dataset, n_obs=1000, 
         n_features=3,
         n_informative=3,
         n_redundant=0,
         n_repeated=0,
         n_clusters_per_class=2):
-    DATASETS_ = {'credit': load_credit_fraud_detection,
-            'cancer': load_breast_cancer_diagnostic,
+    DATASETS_ = {'cancer': load_breast_cancer_diagnostic,
+            'credit': load_credit_fraud_detection,
+            'news':load_news_popularity_prediction,
             'tennis': load_tennis_matches_winner_detection,
             'generate': generate_data}
     if dataset == 'generate':

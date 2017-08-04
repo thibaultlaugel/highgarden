@@ -118,5 +118,20 @@ def growing_sphere_explanation(X, prediction_function, obs_to_interprete, n_laye
     nearest_ennemy = sorted(ennemies, key=lambda x: moving_cost(obs_to_interprete, x[:-1]))[0][:-1]
     return nearest_ennemy
 
+def featred_random(prediction_function, obs_to_interprete, ennemy):
+    PRED_OBS = int(prediction_function(obs_to_interprete)>=0.5) 
+    moves = map(abs, obs_to_interprete - ennemy)
+    moves = sorted(enumerate(moves), key=lambda x: x[1])
+    out = ennemy.copy()
+    for d in moves:
+        new = out.copy()
+        if d[1] > 0.0:
+            new[d[0]] = obs_to_interprete[d[0]]
+            class_new = int(prediction_function(new)>= 0.5)
+            if class_new != PRED_OBS: #si cest toujours un ennemi
+                out = new
+    return out
+
 def main(X, prediction_function, obs_to_interprete, **kwargs):
-    return growing_sphere_explanation(X, prediction_function, obs_to_interprete, **kwargs)
+    enn = growing_sphere_explanation(X, prediction_function, obs_to_interprete, **kwargs)
+    return featred_random(prediction_function, obs_to_interprete, enn)
